@@ -1,0 +1,43 @@
+
+1) first need to un tar the spark engine
+2) inside the /spark-3.2.4-bin-hadoop2.7/conf/
+3) copy the spark-env.sh.template and rename it to spark-env.sh
+4) write the JDK path as like in (/home/.bashrc file)
+
+
+
+shell-command:
+
+pyspark --jars /home/pradeep.k@zucisystems.com/workspace_hadoop/mysql-connector-java-8.0.29.jar
+
+
+
+
+df = spark.read.format("jdbc") \
+    .option("driver", "com.mysql.jdbc.Driver") \
+    .option("url", "jdbc:mysql://localhost:3306/mydb?user=root&password=password") \
+    .option("dbtable", "Wheather") \
+    .load()	
+
+df.show()
+
+
+df = spark.read.format("jdbc") \
+    .option("driver", "com.mysql.jdbc.Driver") \
+    .option("url", "jdbc:mysql://localhost:3306/mydb?user=root&password=password") \
+    .option("dbtable", "Wheather") \
+    .option("partitionColumn", "Sno") \
+    .option("numPartitions", 2) \
+    .option("lowerBound", 0) \
+    .option("upperBound", 4) \
+    .load()	
+
+df.show()
+
+
+df.write.format("jdbc") \
+    .mode("overwrite") \
+    .option("driver", "org.mysql.jdbc.Driver") \
+    .option("url", "jdbc:mysql://localhost:3306/mydb?user=root&password=password") \
+    .option("dbtable", "Wheathertmp") \
+    .save()
